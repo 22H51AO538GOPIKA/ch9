@@ -4,7 +4,7 @@ pipeline{
      stage('Build'){
        steps{
          script{
-           bat 'docker build -t my-todo-app .'
+           bat 'docker build -t getting-started-app .'
            
          }
        }
