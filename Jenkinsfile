@@ -1,20 +1,35 @@
 pipeline {
     agent any
+
     stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t my-node-app .'
+                script {
+                    // Run the Docker build command
+                    bat 'docker build -t getting-started-app .'
+                }
             }
         }
-        stage('Run Tests') {
+
+        stage('Run Batch Script') {
             steps {
-                sh 'docker run --rm my-node-app yarn test'
+                bat 'getting-started-app.bat'
             }
         }
-        stage('Deploy') {
-            steps {
-                sh 'docker run -d -p 3000:3000 --name my-node-app my-node-app'
-            }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs for errors.'
         }
     }
 }
